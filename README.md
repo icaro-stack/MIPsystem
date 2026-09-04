@@ -17,7 +17,3 @@ As telas foram desenvolvidas aplicando os conceitos modernos de arquitetura CSS 
 - **CSS Grid (2D):** Empregado na estruturação do formulário de vigilância (Dashboard) para melhor distribuição de colunas em telas maiores.
 - **Design Tokens:** Uso de Variáveis CSS (`:root`) para padronizar cores e uma escala de espaçamento baseada em 4px, eliminando *magic numbers*.
 
-## 📂 Estrutura de Arquivos
-- 📄 `index.html` - Tela de Login e Autenticação (verificação de status financeiro e perfis).
-- 📄 `dashboard.html` - Tela de Vigilância e Registro de Praga (Dashboard principal do produtor para envio de fotos e dados).
-- 🎨 `styles.css` - Folha de estilos única e modularizada contendo o reset, tokens e media queries.
