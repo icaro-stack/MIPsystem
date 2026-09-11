@@ -1,4 +1,12 @@
 # MIPsystem
+
+# Integrantes
+Ícaro Bantim Piazentim - 117993
+Gabriel Pimenta - 117507 
+Pietro Silva - 119462 
+Matheus Domene - 119129 
+Guilherme Caetano - 118533 
+
 # 🌿 MIPsystem - Protótipo Front-end
 
 ![Status](https://img.shields.io/badge/Status-Em_Desenvolvimento-green)
