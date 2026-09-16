@@ -1,576 +1,1089 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIPsystem - Encontre seu Engenheiro Agrônomo</title>
-    <link rel="stylesheet" href="style.css">
+
+    <meta name="description"
+        content="MIPsystem - Plataforma para conectar produtores rurais e engenheiros agrônomos.">
+
+    <title>MIPsystem - Conectando o campo ao conhecimento</title>
+
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
     <header class="navbar">
-        <div class="logo">MIP<span>system</span></div>
+
+        <div class="logo">
+            MIP<span>system</span>
+        </div>
+
         <nav>
-            <a href="#">Agrônomos</a>
-            <a href="#">Meus Planos</a>
-            <a href="#">Conversas</a>
-            <a href="#" class="btn-profile">Perfil Fazendeiro</a>
+
+            <a href="#"
+                onclick="showSection('view-agronomos'); return false;">
+                Agrônomos
+            </a>
+
+            <a href="#"
+                onclick="showSection('view-chat'); return false;">
+                Conversas
+            </a>
+
+            <a href="#"
+                onclick="showAllSections(); return false;">
+                Ver Todos
+            </a>
+
+            <a href="#"
+                onclick="showSection('view-auth'); return false;"
+                class="btn-profile">
+                Perfil / Entrar
+            </a>
+
         </nav>
+
     </header>
 
+
     <main class="container">
-        <section class="search-section">
-            <h1>Encontre o Agrônomo ideal para sua Fazenda</h1>
-            <p>Contrate especialistas, agende visitas de manejo e acompanhe suas lavouras em um só lugar.</p>
-            
-            <div class="search-bar">
-                <input type="text" placeholder="Busque por especialidade, cidade ou nome...">
-                <button>Buscar</button>
+
+
+        <!-- =========================
+             AGRÔNOMOS
+        ========================== -->
+
+        <section id="view-agronomos"
+            class="view-section active">
+
+            <div class="page-header">
+
+                <span class="section-label">
+                    MIPsystem
+                </span>
+
+                <h1>
+                    Encontre seu Engenheiro Agrônomo
+                </h1>
+
+                <p>
+                    Conecte-se com profissionais especializados
+                    para cuidar melhor da sua produção.
+                </p>
+
             </div>
+
+
+            <!-- BUSCA -->
+
+            <div class="search-panel">
+
+                <div class="search-bar">
+
+                    <span>🔎</span>
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Buscar por nome ou especialidade..."
+                        oninput="filtrarAgronomos()">
+
+                </div>
+
+
+                <div class="filters">
+
+                    <select
+                        id="stateFilter"
+                        onchange="filtrarAgronomos()">
+
+                        <option value="">
+                            Todos os estados
+                        </option>
+
+                        <option value="SP">
+                            São Paulo
+                        </option>
+
+                        <option value="MG">
+                            Minas Gerais
+                        </option>
+
+                        <option value="PR">
+                            Paraná
+                        </option>
+
+                        <option value="MT">
+                            Mato Grosso
+                        </option>
+
+                        <option value="GO">
+                            Goiás
+                        </option>
+
+                        <option value="BA">
+                            Bahia
+                        </option>
+
+                    </select>
+
+
+                    <select
+                        id="specialtyFilter"
+                        onchange="filtrarAgronomos()">
+
+                        <option value="">
+                            Todas as especialidades
+                        </option>
+
+                        <option value="Soja e Milho">
+                            Soja e Milho
+                        </option>
+
+                        <option value="Café">
+                            Café
+                        </option>
+
+                        <option value="Soja e Trigo">
+                            Soja e Trigo
+                        </option>
+
+                        <option value="Algodão">
+                            Algodão
+                        </option>
+
+                        <option value="Milho">
+                            Milho
+                        </option>
+
+                        <option value="Fruticultura">
+                            Fruticultura
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARDS -->
+
+            <div id="agronomosGrid"
+                class="agronomos-grid">
+            </div>
+
+
+            <div id="noResults"
+                class="no-results hidden">
+
+                <div>🌱</div>
+
+                <h3>
+                    Nenhum profissional encontrado
+                </h3>
+
+                <p>
+                    Tente alterar os filtros ou pesquisar outro nome.
+                </p>
+
+            </div>
+
         </section>
 
-        <section class="agronomos-grid">
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">AS</div>
-                    <div>
-                        <h3>Dr. Alex Silva</h3>
-                        <p class="crea">CREA: 10001-D/AC</p>
+
+
+        <!-- =========================
+             PERFIL DO AGRÔNOMO
+        ========================== -->
+
+        <section id="view-profile"
+            class="view-section">
+
+            <div class="profile-page">
+
+                <button
+                    class="btn-back"
+                    onclick="showSection('view-agronomos')">
+
+                    ← Voltar para Agrônomos
+
+                </button>
+
+
+                <!-- CABEÇALHO -->
+
+                <div class="profile-header">
+
+                    <div
+                        class="profile-avatar"
+                        id="profileAvatar">
+
+                        AG
+
                     </div>
+
+
+                    <div class="profile-header-info">
+
+                        <h1 id="profileName">
+                            Nome do Engenheiro
+                        </h1>
+
+                        <p id="profileSpecialty">
+                            Especialidade
+                        </p>
+
+                        <span
+                            class="profile-crea"
+                            id="profileCrea">
+
+                            CREA
+
+                        </span>
+
+                    </div>
+
                 </div>
-                <div class="card-body">
-                    <span class="badge">Sistemas Agroflorestais</span>
-                    <span class="badge">Mandiocultura</span>
-                    <p class="desc">Consultoria focada em agricultura sustentável, recuperação de áreas e cultivo de mandioca.</p>
-                    <p class="location">📍 Rio Branco - AC</p>
+
+
+                <div class="profile-content">
+
+
+                    <!-- SOBRE -->
+
+                    <div class="profile-card">
+
+                        <h2>
+                            Sobre o profissional
+                        </h2>
+
+                        <p id="profileDescription">
+                            Descrição do profissional.
+                        </p>
+
+                    </div>
+
+
+                    <!-- INFORMAÇÕES -->
+
+                    <div class="profile-card">
+
+                        <h2>
+                            Informações profissionais
+                        </h2>
+
+
+                        <div class="profile-info-grid">
+
+
+                            <div class="profile-info-item">
+
+                                <span>
+                                    Especialidade
+                                </span>
+
+                                <strong
+                                    id="profileSpecialtyDetail">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-info-item">
+
+                                <span>
+                                    CREA
+                                </span>
+
+                                <strong
+                                    id="profileCreaDetail">
+                                    -
+                                </strong>
+
+                            </div>
+
+
+                            <div class="profile-info-item">
+
+                                <span>
+                                    Estado
+                                </span>
+
+                                <strong
+                                    id="profileState">
+                                    -
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTATO -->
+
+                    <div
+                        class="profile-card profile-contact">
+
+                        <h2>
+                            Interessado neste profissional?
+                        </h2>
+
+                        <p>
+                            Converse diretamente com o engenheiro
+                            agrônomo ou solicite um plano de manejo
+                            para sua propriedade.
+                        </p>
+
+
+                        <div class="profile-actions">
+
+                            <button
+                                class="btn-secondary"
+                                onclick="abrirChatDoAgronomo()">
+
+                                💬 Conversar
+
+                            </button>
+
+
+                            <button
+                                class="btn-primary"
+                                onclick="abrirPlanoDoAgronomo()">
+
+                                📋 Solicitar Plano
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
+
             </div>
 
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">BS</div>
-                    <div>
-                        <h3>Dra. Beatriz Santos</h3>
-                        <p class="crea">CREA: 10002-D/AL</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Cana-de-Açúcar</span>
-                    <span class="badge">Irrigação</span>
-                    <p class="desc">Especialista em manejo de canaviais e eficiência hídrica no setor sucroenergético.</p>
-                    <p class="location">📍 Maceió - AL</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">CL</div>
-                    <div>
-                        <h3>Dr. Carlos Lima</h3>
-                        <p class="crea">CREA: 10003-D/AP</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Açaí</span>
-                    <span class="badge">Manejo Florestal</span>
-                    <p class="desc">Atuação em cultivo sustentável de açaí e valorização do extrativismo produtivo.</p>
-                    <p class="location">📍 Macapá - AP</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">DC</div>
-                    <div>
-                        <h3>Dra. Daniela Costa</h3>
-                        <p class="crea">CREA: 10004-D/AM</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Fruticultura Tropical</span>
-                    <span class="badge">Solos</span>
-                    <p class="desc">Especializada em nutrição de guaraná, cupuaçu e fruteiras nativas da região.</p>
-                    <p class="location">📍 Manaus - AM</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">EO</div>
-                    <div>
-                        <h3>Dr. Eduardo Oliveira</h3>
-                        <p class="crea">CREA: 10005-D/BA</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Grãos</span>
-                    <span class="badge">Algodão</span>
-                    <p class="desc">Consultor para grandes lavouras de soja e algodão no oeste baiano.</p>
-                    <p class="location">📍 Luís Eduardo Magalhães - BA</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">FR</div>
-                    <div>
-                        <h3>Dra. Fernanda Rocha</h3>
-                        <p class="crea">CREA: 10006-D/CE</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Irrigação</span>
-                    <span class="badge">Fruticultura</span>
-                    <p class="desc">Foco em fruticultura irrigada para exportação (melão e manga).</p>
-                    <p class="location">📍 Limoeiro do Norte - CE</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">GM</div>
-                    <div>
-                        <h3>Dr. Gabriel Martins</h3>
-                        <p class="crea">CREA: 10007-D/DF</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Agricultura de Precisão</span>
-                    <span class="badge">Hortaliças</span>
-                    <p class="desc">Implementação de tecnologias de precisão e produção intensiva no Cerrado.</p>
-                    <p class="location">📍 Brasília - DF</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">HF</div>
-                    <div>
-                        <h3>Dra. Helena Farias</h3>
-                        <p class="crea">CREA: 10008-D/ES</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Café Conilon</span>
-                    <span class="badge">Pimenta-do-Reino</span>
-                    <p class="desc">Especialista na cultura do café e manejo fitossanitário para pimenta.</p>
-                    <p class="location">📍 Linhares - ES</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">IA</div>
-                    <div>
-                        <h3>Dr. Igor Alves</h3>
-                        <p class="crea">CREA: 10009-D/GO</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Soja e Milho</span>
-                    <span class="badge">Proteção de Plantas</span>
-                    <p class="desc">Manejo integrado de pragas e doenças na safrinha de milho e safra de soja.</p>
-                    <p class="location">📍 Rio Verde - GO</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">JM</div>
-                    <div>
-                        <h3>Dra. Juliana Mendes</h3>
-                        <p class="crea">CREA: 10010-D/MA</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Matopiba</span>
-                    <span class="badge">Grãos</span>
-                    <p class="desc">Consultoria para expansão agrícola sustentável e planejamento de lavouras.</p>
-                    <p class="location">📍 Balsas - MA</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">LB</div>
-                    <div>
-                        <h3>Dr. Lucas Barbosa</h3>
-                        <p class="crea">CREA: 10011-D/MT</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Soja em Larga Escala</span>
-                    <span class="badge">Mecanização</span>
-                    <p class="desc">Gestão operacional de frotas agrícolas e manejo integrado em grande escala.</p>
-                    <p class="location">📍 Sorriso - MT</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">MN</div>
-                    <div>
-                        <h3>Dra. Mariana Nogueira</h3>
-                        <p class="crea">CREA: 10012-D/MS</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">ILPF</span>
-                    <span class="badge">Pastagens</span>
-                    <p class="desc">Especialista em Integração Lavoura-Pecuária-Floresta e adubação de pastos.</p>
-                    <p class="location">📍 Dourados - MS</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">NT</div>
-                    <div>
-                        <h3>Dr. Nicolas Teixeira</h3>
-                        <p class="crea">CREA: 10013-D/MG</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Café Arábica</span>
-                    <span class="badge">Fertilidade do Solo</span>
-                    <p class="desc">Consultor em cafeicultura de alta produtividade e mapeamento de nutrientes.</p>
-                    <p class="location">📍 Patrocínio - MG</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">OP</div>
-                    <div>
-                        <h3>Dra. Olivia Pires</h3>
-                        <p class="crea">CREA: 10014-D/PA</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Dendê</span>
-                    <span class="badge">Cacau</span>
-                    <p class="desc">Atuação em culturas tropicais perenes e certificação ambiental de propriedades.</p>
-                    <p class="location">📍 Paragominas - PA</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">PR</div>
-                    <div>
-                        <h3>Dr. Paulo Ribeiro</h3>
-                        <p class="crea">CREA: 10015-D/PB</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Agroecologia</span>
-                    <span class="badge">Semiárido</span>
-                    <p class="desc">Manejo de culturas adaptadas ao clima semiárido e caprinocultura integrada.</p>
-                    <p class="location">📍 Campina Grande - PB</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">RD</div>
-                    <div>
-                        <h3>Dra. Rafaela Dias</h3>
-                        <p class="crea">CREA: 10016-D/PR</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Plantio Direto</span>
-                    <span class="badge">Trigo e Soja</span>
-                    <p class="desc">Especialista em conservação do solo e rotação de culturas de inverno e verão.</p>
-                    <p class="location">📍 Cascavel - PR</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">SC</div>
-                    <div>
-                        <h3>Dr. Samuel Cavalcanti</h3>
-                        <p class="crea">CREA: 10017-D/PE</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Vitivinicultura</span>
-                    <span class="badge">Manga</span>
-                    <p class="desc">Consultor no Vale do São Francisco em produção de uva e manga irrigadas.</p>
-                    <p class="location">📍 Petrolina - PE</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">TG</div>
-                    <div>
-                        <h3>Dra. Tatiana Gomes</h3>
-                        <p class="crea">CREA: 10018-D/PI</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Cereais</span>
-                    <span class="badge">Manejo de Solo</span>
-                    <p class="desc">Especialista na abertura e correção de solos do Cerrado piauiense para grãos.</p>
-                    <p class="location">📍 Bom Jesus - PI</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">VR</div>
-                    <div>
-                        <h3>Dr. Victor Rezende</h3>
-                        <p class="crea">CREA: 10019-D/RJ</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Olericultura</span>
-                    <span class="badge">Orgânicos</span>
-                    <p class="desc">Consultoria em produção orgânica de hortaliças e certificação participativa.</p>
-                    <p class="location">📍 Teresópolis - RJ</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">WB</div>
-                    <div>
-                        <h3>Dra. Wanessa Bezerra</h3>
-                        <p class="crea">CREA: 10020-D/RN</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Fruticultura Irrigada</span>
-                    <span class="badge">Caju</span>
-                    <p class="desc">Manejo de pomares de cajueiro anão precoce e fruticultura do semiárido.</p>
-                    <p class="location">📍 Mossoró - RN</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">XF</div>
-                    <div>
-                        <h3>Dr. Xavier Fonseca</h3>
-                        <p class="crea">CREA: 10021-D/RS</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Arroz Irrigado</span>
-                    <span class="badge">Soja na Várzea</span>
-                    <p class="desc">Especialista em drenagem, manejo de água e rotação arroz-soja na Metade Sul.</p>
-                    <p class="location">📍 Pelotas - RS</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">YM</div>
-                    <div>
-                        <h3>Dra. Yasmine Maciel</h3>
-                        <p class="crea">CREA: 10022-D/RO</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Café Robusta</span>
-                    <span class="badge">Pecuária Intensiva</span>
-                    <p class="desc">Melhoramento de qualidade para café Robusta Amazônico e manejo de pastos.</p>
-                    <p class="location">📍 Cacoal - RO</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">ZN</div>
-                    <div>
-                        <h3>Dr. Zeca Nunes</h3>
-                        <p class="crea">CREA: 10023-D/RR</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Grãos no Lavrado</span>
-                    <span class="badge">Sementes</span>
-                    <p class="desc">Acompanhamento no cultivo de grãos na savana roraimense e controle de qualidade.</p>
-                    <p class="location">📍 Boa Vista - RR</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">AB</div>
-                    <div>
-                        <h3>Dra. Amanda Becker</h3>
-                        <p class="crea">CREA: 10024-D/SC</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Fruticultura de Clima Frio</span>
-                    <span class="badge">Maçã</span>
-                    <p class="desc">Especializada no manejo de pomares de maçã, pera e videiras de altitude.</p>
-                    <p class="location">📍 São Joaquim - SC</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">JP</div>
-                    <div>
-                        <h3>Dr. João Pereira</h3>
-                        <p class="crea">CREA: 10025-D/SP</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Pragas e Doenças</span>
-                    <span class="badge">Citricultura</span>
-                    <p class="desc">Manejo integrado de pragas para citrus, cana-de-açúcar e grãos.</p>
-                    <p class="location">📍 Rio Claro - SP</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">BC</div>
-                    <div>
-                        <h3>Dra. Bianca Carvalho</h3>
-                        <p class="crea">CREA: 10026-D/SE</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Milho</span>
-                    <span class="badge">Citros</span>
-                    <p class="desc">Consultoria em adubação e controle fitossanitário no agreste sergipano.</p>
-                    <p class="location">📍 Itabaiana - SE</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
-
-            <div class="card-agronomo">
-                <div class="card-header">
-                    <div class="avatar">CD</div>
-                    <div>
-                        <h3>Dr. Caio Duarte</h3>
-                        <p class="crea">CREA: 10027-D/TO</p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <span class="badge">Grãos e Sementes</span>
-                    <span class="badge">Irrigação por Pivô</span>
-                    <p class="desc">Manejo de culturas anuais irrigadas e produção de sementes no vale do Araguaia.</p>
-                    <p class="location">📍 Gurupi - TO</p>
-                </div>
-                <div class="card-footer">
-                    <button class="btn-chat">Iniciar Conversa</button>
-                    <button class="btn-plan">Contratar Plano</button>
-                </div>
-            </div>
         </section>
+
+
+
+        <!-- =========================
+             CHAT
+        ========================== -->
+
+        <section id="view-chat"
+            class="view-section">
+
+            <div class="chat-container">
+
+                <div class="chat-header">
+
+                    <div>
+
+                        <span class="online-dot"></span>
+
+                        <strong id="chatAgronomoNome">
+                            Atendimento MIPsystem
+                        </strong>
+
+                    </div>
+
+                    <small>
+                        Engenheiro Agrônomo
+                    </small>
+
+                </div>
+
+
+                <div
+                    id="chatMessages"
+                    class="chat-messages">
+
+                    <div class="message received">
+
+                        Olá! Como posso ajudar
+                        com sua produção?
+
+                    </div>
+
+                </div>
+
+
+                <div class="chat-input">
+
+                    <input
+                        type="text"
+                        id="chatInput"
+                        placeholder="Digite sua mensagem..."
+                        onkeydown="if(event.key === 'Enter') enviarMensagem()">
+
+                    <button onclick="enviarMensagem()">
+                        Enviar
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             LOGIN / CADASTRO
+        ========================== -->
+
+        <section id="view-auth"
+            class="view-section">
+
+            <div class="auth-container">
+
+                <div class="auth-box">
+
+
+                    <div class="auth-logo">
+                        MIP<span>system</span>
+                    </div>
+
+
+                    <h2 id="authTitle">
+                        Entrar no MIPsystem
+                    </h2>
+
+
+                    <p class="auth-subtitle"
+                        id="authSubtitle">
+
+                        Acesse sua conta para continuar.
+
+                    </p>
+
+
+                    <!-- LOGIN / CADASTRO -->
+
+                    <div class="auth-mode">
+
+                        <button
+                            id="btnLoginMode"
+                            class="auth-mode-btn active"
+                            onclick="mudarModoAuth('login')">
+
+                            Entrar
+
+                        </button>
+
+
+                        <button
+                            id="btnCadastroMode"
+                            class="auth-mode-btn"
+                            onclick="mudarModoAuth('cadastro')">
+
+                            Criar conta
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- TIPO DE USUÁRIO -->
+
+                    <div class="user-type-selector">
+
+                        <button
+                            type="button"
+                            class="btn-type active"
+                            data-type="produtor"
+                            onclick="selecionarTipo('produtor')">
+
+                            🌾 Produtor Rural
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-type"
+                            data-type="agronomo"
+                            onclick="selecionarTipo('agronomo')">
+
+                            👨‍🌾 Engenheiro Agrônomo
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- =====================
+                         LOGIN
+                    ====================== -->
+
+                    <form
+                        id="loginForm"
+                        onsubmit="realizarLogin(event)">
+
+                        <div class="form-group">
+
+                            <label>
+                                E-mail
+                            </label>
+
+                            <input
+                                type="email"
+                                id="loginEmail"
+                                placeholder="Digite seu e-mail"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Senha
+                            </label>
+
+                            <div class="password-field">
+
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    placeholder="Digite sua senha"
+                                    required>
+
+                                <button
+                                    type="button"
+                                    onclick="togglePassword('loginPassword', this)">
+
+                                    👁
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="auth-submit">
+
+                            Entrar
+
+                        </button>
+
+                    </form>
+
+
+
+                    <!-- =====================
+                         CADASTRO
+                    ====================== -->
+
+                    <form
+                        id="cadastroForm"
+                        class="hidden"
+                        onsubmit="realizarCadastro(event)">
+
+
+                        <!-- DADOS COMUNS -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Nome completo
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cadNome"
+                                placeholder="Digite seu nome completo"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+
+                                <label>
+                                    CPF
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="cadCpf"
+                                    placeholder="000.000.000-00"
+                                    maxlength="14"
+                                    oninput="mascaraCPF(this)"
+                                    required>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Telefone
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="cadTelefone"
+                                    placeholder="(00) 00000-0000"
+                                    maxlength="15"
+                                    oninput="mascaraTelefone(this)">
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                E-mail
+                            </label>
+
+                            <input
+                                type="email"
+                                id="cadEmail"
+                                placeholder="seuemail@email.com"
+                                required>
+
+                        </div>
+
+
+                        <!-- CAMPOS DO AGRÔNOMO -->
+
+                        <div
+                            id="agronomoFields"
+                            class="hidden">
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    CREA
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="cadCrea"
+                                    placeholder="Ex.: CREA-SP 123456">
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Especialidade
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="cadEspecialidade"
+                                    placeholder="Ex.: Soja, Milho, Café...">
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Descrição do perfil
+                                </label>
+
+                                <textarea
+                                    id="cadDescricao"
+                                    rows="4"
+                                    placeholder="Conte um pouco sobre sua experiência profissional...">
+                                </textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- SENHA -->
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Senha
+                                </label>
+
+                                <div class="password-field">
+
+                                    <input
+                                        type="password"
+                                        id="cadSenha"
+                                        placeholder="Crie uma senha"
+                                        required>
+
+                                    <button
+                                        type="button"
+                                        onclick="togglePassword('cadSenha', this)">
+
+                                        👁
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Confirmar senha
+                                </label>
+
+                                <div class="password-field">
+
+                                    <input
+                                        type="password"
+                                        id="cadConfirmarSenha"
+                                        placeholder="Repita a senha"
+                                        required>
+
+                                    <button
+                                        type="button"
+                                        onclick="togglePassword('cadConfirmarSenha', this)">
+
+                                        👁
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="auth-submit">
+
+                            Criar minha conta
+
+                        </button>
+
+                    </form>
+
+
+                    <p class="auth-info">
+                        O cadastro nesta versão é apenas demonstrativo.
+                        A conexão com o banco de dados será realizada
+                        posteriormente.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             PERFIL DO USUÁRIO
+        ========================== -->
+
+        <section id="view-user-profile"
+            class="view-section">
+
+            <div class="user-profile-page">
+
+                <div class="user-profile-header">
+
+                    <div
+                        class="user-avatar"
+                        id="userAvatar">
+
+                        US
+
+                    </div>
+
+                    <div>
+
+                        <h1 id="userProfileName">
+                            Usuário
+                        </h1>
+
+                        <p id="userProfileType">
+                            Usuário MIPsystem
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="user-profile-card">
+
+                    <h2>
+                        Dados da conta
+                    </h2>
+
+
+                    <div class="profile-info-grid">
+
+                        <div class="profile-info-item">
+
+                            <span>
+                                Nome
+                            </span>
+
+                            <strong id="userInfoName">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-info-item">
+
+                            <span>
+                                E-mail
+                            </span>
+
+                            <strong id="userInfoEmail">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="profile-info-item">
+
+                            <span>
+                                Tipo de usuário
+                            </span>
+
+                            <strong id="userInfoType">
+                                -
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="logout-btn"
+                        onclick="logout()">
+
+                        Sair da conta
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
+
+
+    <!-- =========================
+         MODAL DE PLANO
+    ========================== -->
+
+    <div
+        id="planModal"
+        class="modal-overlay"
+        onclick="fecharModal(event)">
+
+        <div
+            class="modal"
+            onclick="event.stopPropagation()">
+
+
+            <button
+                class="modal-close"
+                onclick="fecharModal()">
+
+                ×
+
+            </button>
+
+
+            <h2>
+                Solicitar Plano
+            </h2>
+
+
+            <p class="modal-subtitle">
+
+                Profissional selecionado:
+
+                <strong id="modalAgronomoNome">
+                    -
+                </strong>
+
+            </p>
+
+
+            <form
+                onsubmit="enviarSolicitacaoPlano(event)">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Nome da fazenda
+                    </label>
+
+                    <input
+                        type="text"
+                        id="planoFazenda"
+                        placeholder="Nome da sua fazenda"
+                        required>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>
+                            Área total
+                        </label>
+
+                        <input
+                            type="number"
+                            id="planoArea"
+                            placeholder="Ex.: 120"
+                            min="0"
+                            step="0.01">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Unidade
+                        </label>
+
+                        <select id="planoUnidade">
+
+                            <option value="hectares">
+                                Hectares
+                            </option>
+
+                            <option value="alqueires">
+                                Alqueires
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label>
+                            Quantidade de visitas
+                        </label>
+
+                        <input
+                            type="number"
+                            id="planoVisitas"
+                            min="1"
+                            value="1"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Periodicidade
+                        </label>
+
+                        <select id="planoPeriodicidade">
+
+                            <option value="Mensal">
+                                Mensal
+                            </option>
+
+                            <option value="Quinzenal">
+                                Quinzenal
+                            </option>
+
+                            <option value="Semanal">
+                                Semanal
+                            </option>
+
+                            <option value="Personalizada">
+                                Personalizada
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Descreva sua necessidade
+                    </label>
+
+                    <textarea
+                        id="planoDescricao"
+                        rows="4"
+                        placeholder="Explique o que você precisa...">
+                    </textarea>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-submit">
+
+                    Enviar solicitação
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
     <script src="script.js"></script>
+
 </body>
+
 </html>
