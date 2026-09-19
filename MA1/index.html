@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIPsystem - Login</title>
+    <!-- Referência ao CSS separado -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="display: flex; align-items: center; justify-content: center;">
+    
+    <main class="container">
+        <section id="view-auth" class="view-section active">
+            <div class="auth-container">
+                <div class="auth-box">
+                    <div class="auth-logo">MIP<span>system</span></div>
+                    <h2 id="authTitle">Entrar no MIPsystem</h2>
+                    <p class="auth-subtitle" id="authSubtitle">Acesse sua conta para continuar.</p>
+
+                    <div class="auth-mode">
+                        <button class="auth-mode-btn active">Entrar</button>
+                    </div>
+
+                    <!-- Formulário que envia os dados para o PHP -->
+                    <form id="loginForm" action="login.php" method="POST">
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <input type="email" id="loginEmail" name="email" placeholder="Digite seu e-mail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <div class="password-field">
+                                <input type="password" id="loginPassword" name="senha" placeholder="Digite sua senha" required>
+                                <button type="button" onclick="togglePassword('loginPassword', this)">👁</button>
+                            </div>
+                        </div>
+                        <button type="submit" class="auth-submit">Entrar no Sistema</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Referência ao JavaScript separado -->
+    <script src="script.js"></script>
+</body>
+</html>
