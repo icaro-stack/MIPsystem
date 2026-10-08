@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIPsystem - Sistema de Manejo Integrado de Pragas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- NAVBAR PRINCIPAL -->
+    <header class="navbar">
+        <div class="logo" onclick="showSection('view-agronomos')">MIP<span>system</span></div>
+        <nav>
+            <a href="#" onclick="showSection('view-agronomos'); return false;">Agrônomos</a>
+            <a href="#" onclick="showSection('view-crud-fazendas'); renderFazendas(); return false;">Fazendas</a>
+            <a href="#" onclick="showSection('view-crud-planos'); renderPlanos(); return false;">Planos</a>
+            <a href="#" onclick="showSection('view-crud-visitas'); renderVisitas(); return false;">Visitas</a>
+            <a href="#" onclick="showSection('view-crud-ocorrencias'); renderOcorrencias(); return false;">Ocorrências</a>
+            <a href="#" onclick="showSection('view-chat'); return false;">Conversas</a>
+            <a href="#" onclick="showSection('view-auth'); return false;" class="btn-profile">Perfil / Entrar</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+
+        <!-- 1. TELA DE AUTENTICAÇÃO (LOGIN / CADASTRO) -->
+        <section id="view-auth" class="view-section active">
+            <div class="auth-container">
+                <div class="auth-box">
+                    <h2>Acesse o MIPsystem</h2>
+                    <p class="auth-subtitle">Faça login ou crie sua conta para acessar a plataforma.</p>
+                    
+                    <div class="auth-modes">
+                        <button id="btnLoginMode" class="btn-mode active" onclick="mudarModoAuth('login')">Entrar</button>
+                        <button id="btnCadastroMode" class="btn-mode" onclick="mudarModoAuth('cadastro')">Criar Conta</button>
+                    </div>
+
+                    <div class="user-types">
+                        <button class="btn-type active" data-type="produtor" onclick="selecionarTipo('produtor')">Produtor Rural</button>
+                        <button class="btn-type" data-type="agronomo" onclick="selecionarTipo('agronomo')">Eng. Agrônomo</button>
+                    </div>
+
+                    <!-- FORMULÁRIO DE LOGIN -->
+                    <form id="loginForm" onsubmit="realizarLogin(event)">
+                        <div class="input-group">
+                            <label for="loginEmail">E-mail</label>
+                            <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="loginSenha">Senha</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="loginSenha" placeholder="Digite sua senha" required>
+                                <button type="button" onclick="togglePassword('loginSenha', this)">👁</button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit">Entrar na Conta</button>
+                    </form>
+
+                    <!-- FORMULÁRIO DE CADASTRO -->
+                    <form id="cadastroForm" class="hidden" onsubmit="realizarCadastro(event)">
+                        <div class="input-group">
+                            <label for="cadNome">Nome Completo</label>
+                            <input type="text" id="cadNome" placeholder="Seu nome completo" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="cadEmail">E-mail</label>
+                            <input type="email" id="cadEmail" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="cadCpf">CPF</label>
+                            <input type="text" id="cadCpf" placeholder="000.000.000-00" oninput="mascaraCPF(this)">
+                        </div>
+                        <div class="input-group">
+                            <label for="cadTelefone">Telefone</label>
+                            <input type="text" id="cadTelefone" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)">
+                        </div>
+
+                        <!-- Campos visíveis apenas para Agrônomos -->
+                        <div id="agronomoFields" class="hidden">
+                            <div class="input-group">
+                                <label for="cadCrea">CREA</label>
+                                <input type="text" id="cadCrea" placeholder="Ex: CREA-SP 123456">
+                            </div>
+                            <div class="input-group">
+                                <label for="cadEspecialidade">Especialidade</label>
+                                <input type="text" id="cadEspecialidade" placeholder="Ex: Soja e Milho">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="cadSenha">Senha</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="cadSenha" placeholder="Crie uma senha" required>
+                                <button type="button" onclick="togglePassword('cadSenha', this)">👁</button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit">Criar Conta</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. TELA DO PERFIL DO USUÁRIO LOGADO -->
+        <section id="view-user-profile" class="view-section">
+            <div class="user-profile-page">
+                <div class="user-profile-header">
+                    <div id="userAvatar" class="user-avatar">US</div>
+                    <div>
+                        <h1 id="userProfileName">Nome do Usuário</h1>
+                        <p id="userProfileType">Tipo de Conta</p>
+                    </div>
+                </div>
+
+                <div class="user-profile-card">
+                    <h2>Dados do Perfil</h2>
+                    <div class="profile-info">
+                        <p><strong>Nome:</strong> <span id="userInfoName">-</span></p>
+                        <p><strong>E-mail:</strong> <span id="userInfoEmail">-</span></p>
+                        <p><strong>Tipo de Conta:</strong> <span id="userInfoType">-</span></p>
+                    </div>
+                    <button class="logout-btn" onclick="logout()">Sair da Conta</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. VITRINE DE AGRÔNOMOS -->
+        <section id="view-agronomos" class="view-section">
+            <div class="container">
+                <div class="search-filters">
+                    <input type="text" id="searchInput" placeholder="Buscar por nome ou especialidade..." oninput="filtrarAgronomos()">
+                    <select id="stateFilter" onchange="filtrarAgronomos()">
+                        <option value="">Todos os Estados</option>
+                        <option value="SP">São Paulo (SP)</option>
+                        <option value="MG">Minas Gerais (MG)</option>
+                        <option value="PR">Paraná (PR)</option>
+                        <option value="MT">Mato Grosso (MT)</option>
+                        <option value="GO">Goiás (GO)</option>
+                        <option value="BA">Bahia (BA)</option>
+                    </select>
+                    <select id="specialtyFilter" onchange="filtrarAgronomos()">
+                        <option value="">Todas as Especialidades</option>
+                        <option value="Soja e Milho">Soja e Milho</option>
+                        <option value="Café">Café</option>
+                        <option value="Soja e Trigo">Soja e Trigo</option>
+                        <option value="Algodão">Algodão</option>
+                        <option value="Milho">Milho</option>
+                        <option value="Fruticultura">Fruticultura</option>
+                    </select>
+                </div>
+
+                <div id="agronomosGrid" class="agronomos-grid"></div>
+                <div id="noResults" class="no-results hidden">Nenhum agrônomo encontrado com os filtros selecionados.</div>
+            </div>
+        </section>
+
+        <!-- 4. VISUALIZAR PERFIL DE AGRÔNOMO -->
+        <section id="view-profile" class="view-section">
+            <div class="container profile-detail">
+                <button class="btn-back" onclick="showSection('view-agronomos')">← Voltar</button>
+                <div class="profile-header">
+                    <div id="profileAvatar" class="profile-avatar-large">AG</div>
+                    <div>
+                        <h2 id="profileName">Nome do Agrônomo</h2>
+                        <p id="profileSpecialty" class="profile-tag">Especialidade</p>
+                        <p id="profileState">Estado</p>
+                        <p id="profileCrea">CREA</p>
+                    </div>
+                </div>
+                <div class="profile-body">
+                    <h3>Sobre o Profissional</h3>
+                    <p id="profileDescription">Descrição detalhada...</p>
+                    
+                    <h3>Detalhes Técnicos</h3>
+                    <ul>
+                        <li><strong>CREA:</strong> <span id="profileCreaDetail">-</span></li>
+                        <li><strong>Atuação Principal:</strong> <span id="profileSpecialtyDetail">-</span></li>
+                    </ul>
+
+                    <div class="profile-actions">
+                        <button class="btn-chat" onclick="abrirChatDoAgronomo()">Enviar Mensagem</button>
+                        <button class="btn-plan" onclick="abrirPlanoDoAgronomo()">Solicitar Plano</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CHAT / CONVERSAS -->
+        <section id="view-chat" class="view-section">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <span class="chat-status-online">●</span>
+                    <h3 id="chatAgronomoNome">Conversa com Engenheiro Agrônomo</h3>
+                </div>
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message received">Olá! Como posso ajudar na sua lavoura hoje?</div>
+                </div>
+                <div class="chat-input-box">
+                    <input type="text" id="chatInput" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter') enviarMensagem()">
+                    <button onclick="enviarMensagem()">Enviar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CRUD FAZENDAS -->
+        <section id="view-crud-fazendas" class="view-section">
+            <div class="crud-container">
+                <div class="crud-header">
+                    <h2>Gerenciar Fazendas</h2>
+                    <button class="btn-primary" onclick="abrirModalFazenda()">+ Nova Fazenda</button>
+                </div>
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Município/UF</th>
+                            <th>Área (ha)</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaFazendasBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 7. CRUD PLANOS DE MANEJO -->
+        <section id="view-crud-planos" class="view-section">
+            <div class="crud-container">
+                <div class="crud-header">
+                    <h2>Planos de Manejo</h2>
+                    <button class="btn-primary" onclick="abrirModalPlano()">+ Novo Plano</button>
+                </div>
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fazenda</th>
+                            <th>Agrônomo</th>
+                            <th>Valor</th>
+                            <th>Visitas</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaPlanosBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 8. CRUD VISITAS TÉCNICAS -->
+        <section id="view-crud-visitas" class="view-section">
+            <div class="crud-container">
+                <div class="crud-header">
+                    <h2>Visitas Técnicas</h2>
+                    <button class="btn-primary" onclick="abrirModalVisita()">+ Agendar Visita</button>
+                </div>
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Plano / Fazenda</th>
+                            <th>Data</th>
+                            <th>Diagnóstico</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaVisitasBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 9. CRUD OCORRÊNCIAS DA LAVOURA -->
+        <section id="view-crud-ocorrencias" class="view-section">
+            <div class="crud-container">
+                <div class="crud-header">
+                    <h2>Ocorrências na Lavoura</h2>
+                    <button class="btn-primary" onclick="abrirModalOcorrencia()">+ Registrar Ocorrência</button>
+                </div>
+                <table class="crud-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fazenda</th>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaOcorrenciasBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAIS DE CRUD E SOLICITAÇÃO -->
+
+    <!-- Modal Solicitar Plano -->
+    <div id="planModal" class="modal-overlay" onclick="fecharModal(event)">
+        <div class="modal-content">
+            <h3>Solicitar Plano com <span id="modalAgronomoNome"></span></h3>
+            <form onsubmit="enviarSolicitacaoPlano(event)">
+                <div class="input-group">
+                    <label>Nome da Fazenda/Propriedade</label>
+                    <input type="text" id="planoFazenda" required placeholder="Ex: Fazenda Santa Cruz">
+                </div>
+                <div class="input-group">
+                    <label>Cultura/Área Estimada (ha)</label>
+                    <input type="text" placeholder="Ex: Soja - 150 ha" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Enviar Solicitação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal CRUD Fazenda -->
+    <div id="modalCrudFazenda" class="modal-overlay" onclick="fecharModalFazenda(event)">
+        <div class="modal-content">
+            <h3 id="tituloModalFazenda">Cadastrar Fazenda</h3>
+            <form onsubmit="salvarFazenda(event)">
+                <input type="hidden" id="fazendaId">
+                <div class="input-group">
+                    <label>Nome da Fazenda</label>
+                    <input type="text" id="fazendaNome" required>
+                </div>
+                <div class="input-group">
+                    <label>Município</label>
+                    <input type="text" id="fazendaMunicipio" required>
+                </div>
+                <div class="input-group">
+                    <label>UF (Estado)</label>
+                    <input type="text" id="fazendaUf" maxlength="2" required placeholder="Ex: SP">
+                </div>
+                <div class="input-group">
+                    <label>Área Total (Hectares)</label>
+                    <input type="number" step="0.01" id="fazendaArea" required>
+                </div>
+                <div class="input-group">
+                    <label>Status</label>
+                    <select id="fazendaStatus">
+                        <option value="ATIVA">ATIVA</option>
+                        <option value="INATIVA">INATIVA</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="fecharModalFazenda()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Fazenda</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal CRUD Plano -->
+    <div id="modalCrudPlano" class="modal-overlay" onclick="fecharModalPlano(event)">
+        <div class="modal-content">
+            <h3 id="tituloModalPlano">Novo Plano de Manejo</h3>
+            <form onsubmit="salvarPlano(event)">
+                <div class="input-group">
+                    <label>Fazenda</label>
+                    <input type="text" id="planoNomeFazenda" required>
+                </div>
+                <div class="input-group">
+                    <label>Engenheiro Agrônomo</label>
+                    <input type="text" id="planoNomeAgronomo" required>
+                </div>
+                <div class="input-group">
+                    <label>Valor Total (R$)</label>
+                    <input type="number" step="0.01" id="planoValor" required>
+                </div>
+                <div class="input-group">
+                    <label>Qtd. de Visitas Previstas</label>
+                    <input type="number" id="planoQtdVisitas" required>
+                </div>
+                <div class="input-group">
+                    <label>Status</label>
+                    <select id="planoStatus">
+                        <option value="NEGOCIACAO">NEGOCIAÇÃO</option>
+                        <option value="ATIVO">ATIVO</option>
+                        <option value="CONCLUIDO">CONCLUÍDO</option>
+                        <option value="CANCELADO">CANCELADO</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="fecharModalPlano()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Plano</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal CRUD Visita -->
+    <div id="modalCrudVisita" class="modal-overlay" onclick="fecharModalVisita(event)">
+        <div class="modal-content">
+            <h3 id="tituloModalVisita">Agendar Visita Técnica</h3>
+            <form onsubmit="salvarVisita(event)">
+                <div class="input-group">
+                    <label>Plano/Fazenda</label>
+                    <input type="text" id="visitaPlano" required>
+                </div>
+                <div class="input-group">
+                    <label>Data da Visita</label>
+                    <input type="date" id="visitaData" required>
+                </div>
+                <div class="input-group">
+                    <label>Diagnóstico / Observações</label>
+                    <textarea id="visitaDiagnostico" rows="3"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Status</label>
+                    <select id="visitaStatus">
+                        <option value="AGENDADA">AGENDADA</option>
+                        <option value="REALIZADA">REALIZADA</option>
+                        <option value="CANCELADA">CANCELADA</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="fecharModalVisita()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Visita</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal CRUD Ocorrência -->
+    <div id="modalCrudOcorrencia" class="modal-overlay" onclick="fecharModalOcorrencia(event)">
+        <div class="modal-content">
+            <h3 id="tituloModalOcorrencia">Registrar Ocorrência</h3>
+            <form onsubmit="salvarOcorrencia(event)">
+                <div class="input-group">
+                    <label>Fazenda</label>
+                    <input type="text" id="ocorrenciaFazenda" required>
+                </div>
+                <div class="input-group">
+                    <label>Data da Ocorrência</label>
+                    <input type="date" id="ocorrenciaData" required>
+                </div>
+                <div class="input-group">
+                    <label>Descrição do Problema / Praga</label>
+                    <textarea id="ocorrenciaDescricao" rows="3" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Status</label>
+                    <select id="ocorrenciaStatus">
+                        <option value="ABERTA">ABERTA</option>
+                        <option value="EM_ANALISE">EM ANÁLISE</option>
+                        <option value="RESOLVIDA">RESOLVIDA</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="fecharModalOcorrencia()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Ocorrência</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
