@@ -1,0 +1,27 @@
+MIPSYSTEM — VERSÃO REVISADA PARA APRESENTAÇÃO ACADÊMICA
+
+ARQUIVOS
+- banco.sql: criação das tabelas e duas views (use em banco vazio).
+- conexao.php: conexão MySQL por PDO.
+- api.php: autenticação e CRUDs de fazendas, planos, visitas e ocorrências.
+- index.php: interface PHP adaptada para usar IDs do banco.
+- script.js: chamadas à API e atualização da interface.
+- styles.css: folha de estilos original preservada.
+
+INSTALAÇÃO
+1. Instale XAMPP ou outro ambiente PHP 8.1+ com MySQL 8.0+.
+2. Crie uma pasta MIPsystem em htdocs e coloque todos os arquivos nela.
+3. No phpMyAdmin, importe banco.sql EM UM BANCO VAZIO. Atenção: faça backup antes de qualquer alteração em banco existente.
+4. Configure DB_HOST, DB_NAME, DB_USER e DB_PASS no ambiente ou ajuste os valores locais de conexao.php.
+5. Inicie Apache e MySQL e acesse http://localhost/MIPsystem/index.php (não use file://).
+6. Crie uma conta de agrônomo, depois uma de produtor. Entre como produtor para cadastrar fazenda e plano.
+7. Depois de cadastrar planos, cadastre visitas e ocorrências. Abra Relatórios para visualizar as views.
+
+LIMITAÇÕES CONHECIDAS
+- O chat continua explicitamente demonstrativo, sem envio/persistência de mensagens.
+- O modal antigo de solicitação rápida é substituído pelo cadastro real de plano; exige fazenda existente.
+- Datas de visita usam 09:00 como horário padrão; interface ainda não permite selecionar a hora.
+- Cadastro de agrônomo usa UF padrão SP, pois o formulário original não tinha seleção de UF.
+- CPF é validado quanto ao formato, não quanto aos dígitos verificadores.
+- O projeto não foi testado contra um servidor MySQL real nesta sessão; sintaxe PHP/JS foi verificada.
+- Não use como sistema de produção sem testes, auditoria de autorização e regras de negócio.
